@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:17
+    container_name: doubling-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: doublinguser
+      POSTGRES_PASSWORD: doublingpass
+      POSTGRES_DB: doublingdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - psql_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+
+volumes:
+  psql_data:
