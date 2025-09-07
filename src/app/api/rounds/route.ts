@@ -27,6 +27,6 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const [ user, authErrResponse ] = requireAuth(request);
   if (authErrResponse) return authErrResponse;
-  const rounds = Round.findOpenRoundsByUser(user.id);
+  const rounds = await Round.findOpenRoundsByUser(user.id);
   return NextResponse.json({ rounds: rounds });
 }

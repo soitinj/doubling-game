@@ -1,7 +1,7 @@
-import Image from "next/image";
+
 
 export default function Home() {
   return (
-    <div></div>
+    <iframe src={`${process.env.NEXT_PUBLIC_SERVER_URL}/widget`}></iframe>
   );
 }

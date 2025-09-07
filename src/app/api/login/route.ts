@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       balance: user.balance
     }
     const token = jwt.sign(userForToken, JWT_SECRET)
-    return NextResponse.json({ token: token, username: user.username, balance: user.balance })
+    return NextResponse.json({ token: token, id: user.id, username: user.username, balance: user.balance })
   } else if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   } else {
