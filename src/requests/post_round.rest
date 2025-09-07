@@ -1,0 +1,7 @@
+POST http://localhost:3000/api/rounds/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZGVsdmV5IiwiYmFsYW5jZSI6MCwiaWF0IjoxNzU3MjAxOTczfQ.0xg8yDTVg0wD4opZsQzMLmEWOEkSIzeUFEUAZgxmhbw
+
+{
+  "initialBet": 100
+}
