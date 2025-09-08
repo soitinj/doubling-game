@@ -34,7 +34,7 @@ To tear down the database, run the following:
 docker-compose down -v
 ```
 
-To start a development server of the next.js app (both the frontend and backend with the game engine), run the following (from root):
+To start a development server of the next.js app (both the frontend and backend with the game engine) for local usage, run the following (from root):
 ```sh
 cd src
 npm install
@@ -43,3 +43,8 @@ npm run dev
 This starts the Next.js app in development mode at [http://localhost:3000](http://localhost:3000).  
 The main game page is available at the root URL [http://localhost:3000/](http://localhost:3000/) and embeds the game client in an `<iframe>`.  
 The game client itself is served at [http://localhost:3000/client](http://localhost:3000/client), but navigating to it directly is usually unnecessary.
+
+The app can also be built and exported for deployment with
+```sh
+npm run build && npm run export
+```
