@@ -6,7 +6,7 @@ const LoginModal = ({ show, setShow }: { show: boolean, setShow: (value: boolean
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const postComment = async (e: React.FormEvent<HTMLFormElement>) => {
+  const postLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await userActions.login(username, password);
     setShow(false);
@@ -18,7 +18,7 @@ const LoginModal = ({ show, setShow }: { show: boolean, setShow: (value: boolean
         <Modal.Title>Login to your account</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={postComment}>
+        <Form onSubmit={postLogin}>
           <Form.Group className='mt-2 mb-2' controlId='loginForm.username'>
             <Form.Control
               type='text'

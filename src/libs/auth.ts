@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import { ErrorResponse } from "@/types/responses";
 
 export const JWT_SECRET = process.env.JWT_SECRET || 'examplesecretpleasereplace';
 
@@ -9,7 +10,7 @@ export interface UserPayload extends JwtPayload {
   balance: number;
 }
 
-export const requireAuth = (request: NextRequest, targetUserId?: number): [UserPayload, null] | [null, NextResponse] => {
+export const requireAuth = (request: NextRequest, targetUserId?: number): [UserPayload, null] | [null, NextResponse<ErrorResponse>] => {
   // Return User if auth is ok, else NextResponse (error)
   const errorResponse = NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
   const authorization = request.headers.get('authorization')

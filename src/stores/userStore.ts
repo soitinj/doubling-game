@@ -1,10 +1,11 @@
 import { create } from 'zustand'
-import auth, { ClientUser } from '@/services/auth'
+import auth from '@/services/auth'
 import { setToken } from '@/services/config'
+import { LoginResponse } from '@/types/responses'
 
 interface UserState {
-  user: ClientUser | null
-  setUser: (user: ClientUser | null) => void
+  user: LoginResponse | null
+  setUser: (user: LoginResponse | null) => void
 }
 
 export const useUserStore = create<UserState>()((set) => ({
@@ -20,10 +21,8 @@ const login = async (username: string, password: string) => {
 }
 
 const register = async (username: string, password: string) => {
-  const user = await auth.register({ username, password });
-  useUserStore.getState().setUser(user);
-  setToken(user.token);
-  window.localStorage.setItem('doublingplayer', JSON.stringify(user));
+  await auth.register({ username, password });
+  await login(username, password);
 }
 
 const logout = () => {
@@ -35,7 +34,7 @@ const logout = () => {
 const userFromCache = async () => {
   const cachedUser = localStorage.getItem('doublingplayer');
   if (!cachedUser) return;
-  const user = JSON.parse(cachedUser) as ClientUser;
+  const user = JSON.parse(cachedUser) as LoginResponse;
   useUserStore.getState().setUser(user);
   setToken(user.token);
 }

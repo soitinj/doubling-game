@@ -1,18 +1,19 @@
 import { create } from 'zustand'
-import roundService, { ClientBet, ClientRound } from '@/services/round'
+import roundService from '@/services/round'
+import { BetResponse, RoundResponse } from '@/types/responses'
 
 interface RoundState {
-  round: ClientRound | null
-  currentBet: ClientBet | null
-  setRound: (round: ClientRound) => void
-  setCurrentBet: (bet: ClientBet | null) => void
+  round: RoundResponse | null
+  currentBet: BetResponse | null
+  setRound: (round: RoundResponse) => void
+  setCurrentBet: (bet: BetResponse | null) => void
 }
 
 export const useRoundStore = create<RoundState>()((set) => ({
   round: null,
   currentBet: null,
-  setRound: (round: ClientRound) => set((_state) => ({ round })),
-  setCurrentBet: (bet: ClientBet | null) => set((_state) => ({ currentBet: bet }))
+  setRound: (round: RoundResponse) => set((_state) => ({ round })),
+  setCurrentBet: (bet: BetResponse | null) => set((_state) => ({ currentBet: bet }))
 }))
 
 export const getRound = async (roundId: string) => {

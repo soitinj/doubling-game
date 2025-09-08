@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { z } from 'zod';
 import User from '@/model/user'
 import { JWT_SECRET, UserPayload } from '@/libs/auth'
+import { ErrorResponse, LoginResponse } from '@/types/responses';
 
 
 const loginSchema = z.object({
@@ -12,9 +13,9 @@ const loginSchema = z.object({
 });
 
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse<LoginResponse | ErrorResponse>> {
   const result = loginSchema.safeParse(await request.json());
-  if (!result.success) return NextResponse.json({ error: 'Bad Request'}, { status: 400 });
+  if (!result.success) return NextResponse.json({ message: 'Bad Request'}, { status: 400 });
   const { username, password } = result.data;
 
   const user = await User.findUserByUsername(username)
@@ -29,8 +30,8 @@ export async function POST(request: NextRequest) {
     const token = jwt.sign(userForToken, JWT_SECRET)
     return NextResponse.json({ token: token, id: user.id, username: user.username, balance: user.balance })
   } else if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    return NextResponse.json({ message: 'User not found' }, { status: 404 })
   } else {
-    return NextResponse.json({ error: 'Invalid username or password' }, { status: 401 })
+    return NextResponse.json({ message: 'Invalid username or password' }, { status: 401 })
   }
 }

@@ -3,12 +3,13 @@ import { z } from 'zod';
 import { zparse } from '@/libs/util';
 import { requireAuth } from '@/libs/auth';
 import Round from '@/model/round'
+import { ErrorResponse, OpenRoundResponse } from '@/types/responses';
 
 const roundSchema = z.object({
   initialBet: z.union([z.literal(100), z.literal(200), z.literal(500), z.literal(1000)])
 });
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse<OpenRoundResponse | ErrorResponse>> {
   const [user, authErrResponse] = requireAuth(request);
   if (authErrResponse) return authErrResponse;
   const [data, errResponse] = await zparse(request, roundSchema);
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const [round, newUser] = await Round.openRound(user.id, initialBet);
-    return NextResponse.json({ round, user: newUser });
+    return NextResponse.json({ round: round!, user: newUser! });
   } catch (err) {
     console.log(err);
     return NextResponse.json({ message: "Bad Request" }, { status: 400 });

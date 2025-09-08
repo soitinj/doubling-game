@@ -1,11 +1,12 @@
+import { ErrorResponse } from '@/types/responses';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod'
 
 
-export const zparse = async <T>(request: NextRequest, schema: z.ZodSchema<T>): Promise<[T, null] | [null, NextResponse]> => {
+export const zparse = async <T>(request: NextRequest, schema: z.ZodSchema<T>): Promise<[T, null] | [null, NextResponse<ErrorResponse>]> => {
   const result = schema.safeParse(await request.json());
   if (!result.success) {
-    return [null, NextResponse.json({ error: 'Bad Request'}, { status: 400 })]
+    return [null, NextResponse.json({ message: 'Bad Request'}, { status: 400 })]
   } else {
     return [result.data, null]
   }

@@ -4,12 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/libs/auth'
 import { zparse, randomCard } from '@/libs/util'
 import { z } from 'zod';
+import { BetResponse, ErrorResponse } from '@/types/responses';
 
 const betSchema = z.object({
   betSymbol: z.enum(['HIGH', 'LOW'])
 });
 
-export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse<BetResponse | ErrorResponse>> {
   const round = await Round.findRoundById((await params).id);
   if (!round) return NextResponse.json({ message: 'Not Found' }, { status: 404 });
   const [ _user, authErrResponse ] = requireAuth(request, round.userId);
@@ -24,5 +25,5 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const correctBet = (card.rank < 7 && betSymbol === 'LOW') || (card.rank > 7 && betSymbol === 'HIGH');
 
   const bet = await Bet.placeBet(round.id, correctBet);
-  return NextResponse.json({ betSymbol, card, bet });
+  return NextResponse.json({ betSymbol, card, bet: bet! });
 }
