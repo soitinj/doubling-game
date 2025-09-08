@@ -1,36 +1,178 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HTTP API Documentation
 
-## Getting Started
+## Env files
+One .env file exists, .env.development. A .env.local file can be created next to the src/ folder next to .env.development to override these values.
 
-First, run the development server:
+## Base URL
+BASE_URL should be set in an .env file. For development, this is `http://localhost:3000`.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Endpoints
+
+**Required Headers:**
+* `Content-Type: application/json`
+* `Àuthorization: Bearer <token>` (If auth is required)
+
+---
+
+### [POST] /api/register
+**Description:** Login a new user.
+
+**Request Body:**
+```json
+{
+  "username": "string",
+  "password": "string"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Response 200 OK: UserResponse**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```ts
+type UserResponse = {
+  username: string,
+  id: number,
+  balance: number
+}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+### [POST] /api/login
+**Description:** Login an user.
 
-To learn more about Next.js, take a look at the following resources:
+**Request Body:**
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Response 200 OK: LoginResponse**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```ts
+type LoginResponse = {
+  username: string,
+  id: number,
+  balance: number,
+  token: string // login token to be used in Authorization header
+}
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### [GET] /api/balance
+**Description:** Get a user's balance.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Response 200 OK: UserResponse**
+
+```ts
+type UserResponse = {
+  username: string,
+  id: number,
+  balance: number,
+}
+```
+
+---
+
+### [GET] /api/rounds
+**Description:** Fetch a list of open (playable) rounds.
+
+Auth: required
+
+**Response 200 OK: RoundResponse[]**
+```ts
+type RoundResponse = {
+  id: string,
+  userId: number,
+  stateOpen: boolean,
+  initialBet: number,
+  win: number,
+  createdAt: string
+}
+```
+
+---
+
+### [GET] /api/rounds/{id}
+**Description:** Fetches the status of a specific round
+
+Auth: required
+
+**Response 200 OK: RoundResponse**
+
+Same as GET `/api/rounds`
+
+---
+
+
+### [POST] /api/rounds
+**Description:** Open a new round.
+
+Auth: required
+
+**Request Body:**
+```json
+{
+  "initialBet": "number"
+}
+```
+
+**Response 201 Created: OpenRoundResponse**
+```ts
+type OpenRoundResponse = {
+  "round": RoundResponse,
+  "user": UserResponse
+}
+```
+
+---
+
+### [POST] /api/rounds/{id}/bet
+**Description:** Bet on an open round.
+
+Auth: required
+
+**Request Body:**
+```json
+{
+  "betSymbol": "string" // Either "HIGH" or "LOW"
+}
+```
+
+**Response 201 Created: BetResponse**
+
+```ts
+type BetResponse = {
+  bet: Bet,
+  card: { rank: number, suit: string },
+  betSymbol: string
+}
+```
+
+---
+
+### [POST] /api/rounds/{id}/claim
+**Description:** Claim an open (winning) round.
+
+Auth: required
+
+**Request Body:**
+```json
+{
+  "betSymbol": "string" // Either "HIGH" or "LOW"
+}
+```
+
+**Response 201 Created: BetResponse**
+
+```ts
+type ClaimResponse = {
+  roundWin: number // amount won
+}
+```
+
+---

@@ -3,7 +3,7 @@ import { Round } from "@/model/round";
 import { User } from "@/model/user";
 
 // API response payloads
-export type RegisterResponse = User;
+export type UserResponse = User;
 
 export type LoginResponse = User & { token: string };
 

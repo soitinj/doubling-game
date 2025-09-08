@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { zparse } from '@/libs/util';
 import { requireAuth } from '@/libs/auth';
 import Round from '@/model/round'
-import { ErrorResponse, OpenRoundResponse } from '@/types/responses';
+import { ErrorResponse, OpenRoundResponse, RoundResponse } from '@/types/responses';
 
 const roundSchema = z.object({
   initialBet: z.union([z.literal(100), z.literal(200), z.literal(500), z.literal(1000)])
@@ -25,9 +25,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<OpenRound
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse<RoundResponse[] | ErrorResponse>> {
   const [ user, authErrResponse ] = requireAuth(request);
   if (authErrResponse) return authErrResponse;
   const rounds = await Round.findOpenRoundsByUser(user.id);
-  return NextResponse.json({ rounds: rounds });
+  return NextResponse.json([ ...rounds ]);
 }

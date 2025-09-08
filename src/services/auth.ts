@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getConfig } from '@/services/config';
-import { BalanceResponse, LoginResponse, RegisterResponse } from '@/types/responses';
+import { BalanceResponse, LoginResponse, UserResponse } from '@/types/responses';
 
 
 const baseUrl = `/api`;
@@ -10,7 +10,7 @@ const login = async (credentials: { username: string, password: string }): Promi
   return response.data;
 }
 
-const register = async (credentials: { username: string, password: string }): Promise<RegisterResponse> => {
+const register = async (credentials: { username: string, password: string }): Promise<UserResponse> => {
   const response = await axios.post(`${baseUrl}/register`, credentials);
   return response.data;
 }

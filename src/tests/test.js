@@ -71,8 +71,8 @@ describe('Doubling Game API', async () => {
             assert.strictEqual(res.status, 200, 'Fetching rounds list should be successful');
             const data = await res.json();
             console.log(data);
-            assert.ok(Array.isArray(data.rounds), 'Response should contain a "rounds" array');
-            assert.strictEqual(data.rounds.length, 0, 'New user should have no rounds');
+            assert.ok(Array.isArray(data), 'Response should contain a "rounds" array');
+            assert.strictEqual(data.length, 0, 'New user should have no rounds');
             console.log('Initial rounds list check successful. Found 0 rounds.');
         });
     });
@@ -100,8 +100,8 @@ describe('Doubling Game API', async () => {
             });
             assert.strictEqual(res.status, 200, 'Fetching rounds list should be successful');
             const data = await res.json();
-            assert.strictEqual(data.rounds.length, 1, 'Rounds list should now contain one round');
-            assert.strictEqual(data.rounds[0].id, createdRoundId, 'The listed round ID should match the created round ID');
+            assert.strictEqual(data.length, 1, 'Rounds list should now contain one round');
+            assert.strictEqual(data[0].id, createdRoundId, 'The listed round ID should match the created round ID');
             console.log('Rounds list check successful. Found 1 round as expected.');
         });
     });

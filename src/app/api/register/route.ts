@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import User from '@/model/user'
-import { RegisterResponse, ErrorResponse } from '@/types/responses';
+import { UserResponse, ErrorResponse } from '@/types/responses';
 
 
 const registerSchema = z.object({
@@ -11,7 +11,7 @@ const registerSchema = z.object({
 });
 
 
-export async function POST(request: NextRequest): Promise<NextResponse<RegisterResponse | ErrorResponse>> {
+export async function POST(request: NextRequest): Promise<NextResponse<UserResponse | ErrorResponse>> {
   const result = registerSchema.safeParse(await request.json())
   if (!result.success) return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
   const { username, password } = result.data
