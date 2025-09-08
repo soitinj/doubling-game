@@ -21,7 +21,7 @@ async function findRoundsByUser(userId: number): Promise<Round[]> {
 
 async function findOpenRoundsByUser(userId: number): Promise<Round[]> {
   const rounds = await sql<Round[]>`
-    SELECT * FROM rounds WHERE user_id = ${ userId } AND state_state_open = TRUE
+    SELECT * FROM rounds WHERE user_id = ${ userId } AND state_open = TRUE
   `;
   return rounds;
 }

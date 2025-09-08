@@ -18,7 +18,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<OpenRound
 
   try {
     const [round, newUser] = await Round.openRound(user.id, initialBet);
-    return NextResponse.json({ round: round!, user: newUser! });
+    return NextResponse.json({ round: round!, user: newUser! }, { status: 201 });
   } catch (err) {
     console.log(err);
     return NextResponse.json({ message: "Bad Request" }, { status: 400 });

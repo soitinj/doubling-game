@@ -17,6 +17,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<RegisterR
   const { username, password } = result.data
 
   const passwordHash = await bcrypt.hash(password, 4);
-  const user = await User.register(username, passwordHash)
-  return NextResponse.json({ id: user.id, username: user.username, balance: user.balance })
+  const user = await User.register(username, passwordHash);
+  return NextResponse.json({ id: user.id, username: user.username, balance: user.balance }, { status: 201 });
 }
