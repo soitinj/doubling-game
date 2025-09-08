@@ -77,6 +77,35 @@ describe('Doubling Game API', async () => {
         });
     });
 
+    describe('Round Creation and Listing', () => {
+        let createdRoundId;
+
+        test('should successfully start a new round', async () => {
+            const initialBet = 100;
+            const res = await fetch(`${BASE_URL}/rounds`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ initialBet }),
+            });
+            assert.strictEqual(res.status, 201, 'Starting a round should return 201 Created');
+            const data = await res.json();
+            assert.ok(data.round.id, 'Response should contain a round ID');
+            createdRoundId = data.round.id;
+            console.log(`\nRound creation check successful. Created round ID: ${createdRoundId}`);
+        });
+
+        test('should list the newly created round (GET /api/rounds)', async () => {
+            const res = await fetch(`${BASE_URL}/rounds`, {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+            assert.strictEqual(res.status, 200, 'Fetching rounds list should be successful');
+            const data = await res.json();
+            assert.strictEqual(data.rounds.length, 1, 'Rounds list should now contain one round');
+            assert.strictEqual(data.rounds[0].id, createdRoundId, 'The listed round ID should match the created round ID');
+            console.log('Rounds list check successful. Found 1 round as expected.');
+        });
+    });
+
     describe('Gameplay Scenarios', () => {
         let winWinClaimCovered = false;
         let lossCovered = false;
