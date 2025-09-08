@@ -9,6 +9,8 @@ const LoginModal = ({ show, setShow }: { show: boolean, setShow: (value: boolean
   const postLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await userActions.login(username, password);
+    setUsername('');
+    setPassword('');
     setShow(false);
   }
 

@@ -14,6 +14,9 @@ const LoginModal = ({ show, setShow }: { show: boolean, setShow: (value: boolean
       return;
     }
     await userActions.register(username, password);
+    setUsername('');
+    setPassword('');
+    setPasswordAgain('');
     setShow(false);
   }
 
