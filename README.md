@@ -18,7 +18,9 @@ To view the **API documentation,** see the readme `src/README.md`
 Prequisites:
 - docker
 - docker-compose
-- node.js v22 or higher
+- node.js v22 or higher (comes with npm)
+
+The current installed node version can be checked by running `node --version`.
 
 The project requires a database to connect to. A dockerized db for testing purposes can be found in the `db/` folder.
 
@@ -44,7 +46,16 @@ This starts the Next.js app in development mode at [http://localhost:3000](http:
 The main game page is available at the root URL [http://localhost:3000/](http://localhost:3000/) and embeds the game client in an `<iframe>`.  
 The game client itself is served at [http://localhost:3000/client](http://localhost:3000/client), but navigating to it directly is usually unnecessary.
 
-The app can also be built and exported for deployment with
+The game client can also be built and exported for deployment with
 ```sh
-npm run build && npm run export
+next build && next export
 ```
+The resulting client will be built and exported into the `out/` folder. Note that this only builds the client and the backend HTTP API still needs to deployed elsewhere. Building the app also requires setting the correct environment variable `NEXT_PUBLIC_API_URL` so the client knows which backend to connect to.
+
+### Tests
+Some tests for the HTTP API are located in the `src/tests/` folder, implemented with node's test framework.
+To run these tests, navigate to `src/`folder and run:
+```sh
+node --test tests/test.js
+```
+A few .rest request files are located in the `src/requests/` folder. These are simple development-time tests that can be run directly in VS Code using the REST Client extension.
